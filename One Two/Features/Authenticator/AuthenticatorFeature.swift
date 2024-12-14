@@ -9,6 +9,7 @@ import ComposableArchitecture
 import Foundation
 
 // MARK: - Feature
+
 @Reducer
 struct AuthenticatorFeature {
     struct State: Equatable {

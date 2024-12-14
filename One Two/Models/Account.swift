@@ -8,6 +8,7 @@
 import Foundation
 
 // MARK: - Models
+
 struct Account: Equatable, Identifiable {
     let id: UUID
     let name: String
@@ -17,6 +18,6 @@ struct Account: Equatable, Identifiable {
         // TODO: implement proper TOTP generation here
         // This is just a placeholder that changes every 30 seconds
         let timeBlock = Int(Date().timeIntervalSince1970 / 30)
-        return String(format: "%06d", timeBlock % 1000000)
+        return String(format: "%06d", timeBlock % 1_000_000)
     }
 }

@@ -5,11 +5,12 @@
 //  Created by Nando Thomassen on 14/12/2024.
 //
 
+import ComposableArchitecture
 import Foundation
 import SwiftUI
-import ComposableArchitecture
 
 // MARK: - Views
+
 struct AuthenticatorView: View {
     let store: StoreOf<AuthenticatorFeature>
 
@@ -63,7 +64,7 @@ struct AuthenticatorView: View {
                 accounts: [
                     Account(id: UUID(), name: "GitHub", secret: "JBSWY3DPEHPK3PXP"),
                     Account(id: UUID(), name: "Google", secret: "WAAZK3PNR2KA2"),
-                    Account(id: UUID(), name: "AWS", secret: "FVX4NKHFVFDMW")
+                    Account(id: UUID(), name: "AWS", secret: "FVX4NKHFVFDMW"),
                 ]
             ),
             reducer: { AuthenticatorFeature() }
