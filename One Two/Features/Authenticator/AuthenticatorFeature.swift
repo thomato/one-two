@@ -32,7 +32,7 @@ struct AuthenticatorFeature {
                     name: "Example Account \(state.accounts.count + 1)",
                     secret: "JBSWY3DPEHPK3PXP" // Example secret key
                 )
-                
+
                 state.accounts.append(newAccount)
                 return .none
 
