@@ -1,13 +1,13 @@
 //
-//  One_TwoTests.swift
+//  AuthenticatorFeatureTests.swift
 //  One TwoTests
 //
 //  Created by Nando Thomassen on 12/12/2024.
 //
 
-import XCTest
 import ComposableArchitecture
 @testable import One_Two
+import XCTest
 
 @MainActor
 final class AuthenticatorFeatureTests: XCTestCase {
@@ -27,7 +27,7 @@ final class AuthenticatorFeatureTests: XCTestCase {
                     id: UUID(0),
                     name: "Example Account 1",
                     secret: "JBSWY3DPEHPK3PXP"
-                )
+                ),
             ]
         }
 
@@ -42,7 +42,7 @@ final class AuthenticatorFeatureTests: XCTestCase {
                     id: UUID(1),
                     name: "Example Account 2",
                     secret: "JBSWY3DPEHPK3PXP"
-                )
+                ),
             ]
         }
     }
@@ -58,7 +58,7 @@ final class AuthenticatorFeatureTests: XCTestCase {
                             id: UUID(0),
                             name: "Example Account 1",
                             secret: "JBSWY3DPEHPK3PXP"
-                        )
+                        ),
                     ]
                 ),
                 reducer: { AuthenticatorFeature() }
@@ -91,7 +91,7 @@ final class AuthenticatorFeatureTests: XCTestCase {
                             id: UUID(2),
                             name: "Example Account 3",
                             secret: "JBSWY3DPEHPK3PXP"
-                        )
+                        ),
                     ]
                 ),
                 reducer: { AuthenticatorFeature() }
@@ -104,7 +104,7 @@ final class AuthenticatorFeatureTests: XCTestCase {
                     id: UUID(1),
                     name: "Example Account 2",
                     secret: "JBSWY3DPEHPK3PXP"
-                )
+                ),
             ]
         }
     }
