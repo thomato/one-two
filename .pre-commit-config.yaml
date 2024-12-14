@@ -1,0 +1,9 @@
+repos:
+-   repo: local
+    hooks:
+    -   id: swiftlint
+        name: SwiftLint
+        entry: swiftlint --strict --fix
+        language: system
+        types: [swift]
+        pass_filenames: true
