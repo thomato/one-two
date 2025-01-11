@@ -1,13 +1,13 @@
 //
-//  One_TwoUITestsLaunchTests.swift
-//  One TwoUITests
+//  OneTwoUITestsLaunchTests.swift
+//  OneTwoUITests
 //
 //  Created by Nando Thomassen on 12/12/2024.
 //
 
 import XCTest
 
-final class One_TwoUITestsLaunchTests: XCTestCase {
+final class OneTwoUITestsLaunchTests: XCTestCase {
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

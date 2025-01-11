@@ -16,50 +16,50 @@
 			containerPortal = D8285E222D0B82BB00671C47 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = D8285E292D0B82BB00671C47;
-			remoteInfo = "One Two";
+			remoteInfo = OneTwo;
 		};
 		D8285E492D0B82BC00671C47 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D8285E222D0B82BB00671C47 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = D8285E292D0B82BB00671C47;
-			remoteInfo = "One Two";
+			remoteInfo = OneTwo;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D8285E2A2D0B82BB00671C47 /* One Two.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "One Two.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8285E3E2D0B82BC00671C47 /* One TwoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "One TwoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8285E482D0B82BC00671C47 /* One TwoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "One TwoUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8285E2A2D0B82BB00671C47 /* OneTwo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneTwo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8285E3E2D0B82BC00671C47 /* OneTwoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneTwoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8285E482D0B82BC00671C47 /* OneTwoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneTwoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D8285E502D0B82BC00671C47 /* Exceptions for "One Two" folder in "One Two" target */ = {
+		D898F6E92D31E796006563AC /* Exceptions for "OneTwo" folder in "OneTwo" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = D8285E292D0B82BB00671C47 /* One Two */;
+			target = D8285E292D0B82BB00671C47 /* OneTwo */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D8285E2C2D0B82BB00671C47 /* One Two */ = {
+		D8285E2C2D0B82BB00671C47 /* OneTwo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				D8285E502D0B82BC00671C47 /* Exceptions for "One Two" folder in "One Two" target */,
+				D898F6E92D31E796006563AC /* Exceptions for "OneTwo" folder in "OneTwo" target */,
 			);
-			path = "One Two";
+			path = OneTwo;
 			sourceTree = "<group>";
 		};
-		D8285E412D0B82BC00671C47 /* One TwoTests */ = {
+		D8285E412D0B82BC00671C47 /* OneTwoTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "One TwoTests";
+			path = OneTwoTests;
 			sourceTree = "<group>";
 		};
-		D8285E4B2D0B82BC00671C47 /* One TwoUITests */ = {
+		D8285E4B2D0B82BC00671C47 /* OneTwoUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "One TwoUITests";
+			path = OneTwoUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -93,9 +93,9 @@
 		D8285E212D0B82BB00671C47 = {
 			isa = PBXGroup;
 			children = (
-				D8285E2C2D0B82BB00671C47 /* One Two */,
-				D8285E412D0B82BC00671C47 /* One TwoTests */,
-				D8285E4B2D0B82BC00671C47 /* One TwoUITests */,
+				D8285E2C2D0B82BB00671C47 /* OneTwo */,
+				D8285E412D0B82BC00671C47 /* OneTwoTests */,
+				D8285E4B2D0B82BC00671C47 /* OneTwoUITests */,
 				D8285E2B2D0B82BB00671C47 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,9 +103,9 @@
 		D8285E2B2D0B82BB00671C47 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D8285E2A2D0B82BB00671C47 /* One Two.app */,
-				D8285E3E2D0B82BC00671C47 /* One TwoTests.xctest */,
-				D8285E482D0B82BC00671C47 /* One TwoUITests.xctest */,
+				D8285E2A2D0B82BB00671C47 /* OneTwo.app */,
+				D8285E3E2D0B82BC00671C47 /* OneTwoTests.xctest */,
+				D8285E482D0B82BC00671C47 /* OneTwoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,9 +113,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D8285E292D0B82BB00671C47 /* One Two */ = {
+		D8285E292D0B82BB00671C47 /* OneTwo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8285E512D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "One Two" */;
+			buildConfigurationList = D8285E512D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "OneTwo" */;
 			buildPhases = (
 				D8285E262D0B82BB00671C47 /* Sources */,
 				D8285E272D0B82BB00671C47 /* Frameworks */,
@@ -126,19 +126,19 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				D8285E2C2D0B82BB00671C47 /* One Two */,
+				D8285E2C2D0B82BB00671C47 /* OneTwo */,
 			);
-			name = "One Two";
+			name = OneTwo;
 			packageProductDependencies = (
 				D8A856EF2D0B8A48009E7153 /* ComposableArchitecture */,
 			);
-			productName = "One Two";
-			productReference = D8285E2A2D0B82BB00671C47 /* One Two.app */;
+			productName = OneTwo;
+			productReference = D8285E2A2D0B82BB00671C47 /* OneTwo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D8285E3D2D0B82BC00671C47 /* One TwoTests */ = {
+		D8285E3D2D0B82BC00671C47 /* OneTwoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8285E562D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "One TwoTests" */;
+			buildConfigurationList = D8285E562D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "OneTwoTests" */;
 			buildPhases = (
 				D8285E3A2D0B82BC00671C47 /* Sources */,
 				D8285E3B2D0B82BC00671C47 /* Frameworks */,
@@ -150,18 +150,18 @@
 				D8285E402D0B82BC00671C47 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				D8285E412D0B82BC00671C47 /* One TwoTests */,
+				D8285E412D0B82BC00671C47 /* OneTwoTests */,
 			);
-			name = "One TwoTests";
+			name = OneTwoTests;
 			packageProductDependencies = (
 			);
-			productName = "One TwoTests";
-			productReference = D8285E3E2D0B82BC00671C47 /* One TwoTests.xctest */;
+			productName = OneTwoTests;
+			productReference = D8285E3E2D0B82BC00671C47 /* OneTwoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D8285E472D0B82BC00671C47 /* One TwoUITests */ = {
+		D8285E472D0B82BC00671C47 /* OneTwoUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8285E592D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "One TwoUITests" */;
+			buildConfigurationList = D8285E592D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "OneTwoUITests" */;
 			buildPhases = (
 				D8285E442D0B82BC00671C47 /* Sources */,
 				D8285E452D0B82BC00671C47 /* Frameworks */,
@@ -173,13 +173,13 @@
 				D8285E4A2D0B82BC00671C47 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				D8285E4B2D0B82BC00671C47 /* One TwoUITests */,
+				D8285E4B2D0B82BC00671C47 /* OneTwoUITests */,
 			);
-			name = "One TwoUITests";
+			name = OneTwoUITests;
 			packageProductDependencies = (
 			);
-			productName = "One TwoUITests";
-			productReference = D8285E482D0B82BC00671C47 /* One TwoUITests.xctest */;
+			productName = OneTwoUITests;
+			productReference = D8285E482D0B82BC00671C47 /* OneTwoUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -205,7 +205,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D8285E252D0B82BB00671C47 /* Build configuration list for PBXProject "One Two" */;
+			buildConfigurationList = D8285E252D0B82BB00671C47 /* Build configuration list for PBXProject "OneTwo" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -222,9 +222,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D8285E292D0B82BB00671C47 /* One Two */,
-				D8285E3D2D0B82BC00671C47 /* One TwoTests */,
-				D8285E472D0B82BC00671C47 /* One TwoUITests */,
+				D8285E292D0B82BB00671C47 /* OneTwo */,
+				D8285E3D2D0B82BC00671C47 /* OneTwoTests */,
+				D8285E472D0B82BC00671C47 /* OneTwoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -280,12 +280,12 @@
 /* Begin PBXTargetDependency section */
 		D8285E402D0B82BC00671C47 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D8285E292D0B82BB00671C47 /* One Two */;
+			target = D8285E292D0B82BB00671C47 /* OneTwo */;
 			targetProxy = D8285E3F2D0B82BC00671C47 /* PBXContainerItemProxy */;
 		};
 		D8285E4A2D0B82BC00671C47 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D8285E292D0B82BB00671C47 /* One Two */;
+			target = D8285E292D0B82BB00671C47 /* OneTwo */;
 			targetProxy = D8285E492D0B82BC00671C47 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -296,15 +296,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "One Two/One_Two.entitlements";
+				CODE_SIGN_ENTITLEMENTS = OneTwo/OneTwo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"One Two/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"OneTwo/Preview Content\"";
 				DEVELOPMENT_TEAM = 5H823CDB8B;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "One Two/Info.plist";
+				INFOPLIST_FILE = OneTwo/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -320,7 +320,8 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "pro.thomassen.One-Two";
+				PRODUCT_BUNDLE_IDENTIFIER = pro.thomassen.OneTwo;
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -336,15 +337,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "One Two/One_Two.entitlements";
+				CODE_SIGN_ENTITLEMENTS = OneTwo/OneTwo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"One Two/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"OneTwo/Preview Content\"";
 				DEVELOPMENT_TEAM = 5H823CDB8B;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "One Two/Info.plist";
+				INFOPLIST_FILE = OneTwo/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -360,7 +361,8 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "pro.thomassen.One-Two";
+				PRODUCT_BUNDLE_IDENTIFIER = pro.thomassen.OneTwo;
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -503,7 +505,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/One Two.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/One Two";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OneTwo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OneTwo";
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -526,7 +528,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/One Two.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/One Two";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OneTwo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OneTwo";
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
@@ -578,7 +580,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D8285E252D0B82BB00671C47 /* Build configuration list for PBXProject "One Two" */ = {
+		D8285E252D0B82BB00671C47 /* Build configuration list for PBXProject "OneTwo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8285E542D0B82BC00671C47 /* Debug */,
@@ -587,7 +589,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8285E512D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "One Two" */ = {
+		D8285E512D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "OneTwo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8285E522D0B82BC00671C47 /* Debug */,
@@ -596,7 +598,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8285E562D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "One TwoTests" */ = {
+		D8285E562D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "OneTwoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8285E572D0B82BC00671C47 /* Debug */,
@@ -605,7 +607,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8285E592D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "One TwoUITests" */ = {
+		D8285E592D0B82BC00671C47 /* Build configuration list for PBXNativeTarget "OneTwoUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8285E5A2D0B82BC00671C47 /* Debug */,

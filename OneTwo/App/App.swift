@@ -1,6 +1,6 @@
 //
 //  App.swift
-//  One Two
+//  OneTwo
 //
 //  Created by Nando Thomassen on 12/12/2024.
 //

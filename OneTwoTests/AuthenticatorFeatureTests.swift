@@ -1,12 +1,12 @@
 //
 //  AuthenticatorFeatureTests.swift
-//  One TwoTests
+//  OneTwoTests
 //
 //  Created by Nando Thomassen on 12/12/2024.
 //
 
 import ComposableArchitecture
-@testable import One_Two
+@testable import OneTwo
 import XCTest
 
 @MainActor

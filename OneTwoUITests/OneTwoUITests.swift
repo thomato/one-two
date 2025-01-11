@@ -1,13 +1,13 @@
 //
-//  One_TwoUITests.swift
-//  One TwoUITests
+//  OneTwoUITests.swift
+//  OneTwoUITests
 //
 //  Created by Nando Thomassen on 12/12/2024.
 //
 
 import XCTest
 
-final class One_TwoUITests: XCTestCase {
+final class OneTwoUITests: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 

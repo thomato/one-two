@@ -1,6 +1,6 @@
 //
 //  AuthenticatorView.swift
-//  One Two
+//  OneTwo
 //
 //  Created by Nando Thomassen on 14/12/2024.
 //
