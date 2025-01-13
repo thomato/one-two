@@ -27,7 +27,6 @@ struct AuthenticatorFeature {
         Reduce { state, action in
             switch action {
             case .addAccountButtonTapped:
-                // TODO: Handle scanning QR codes or manual entry here
                 let newAccount = Account(
                     id: uuid(),
                     name: "Example Account \(state.accounts.count + 1)",

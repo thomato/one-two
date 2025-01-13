@@ -3,7 +3,7 @@ repos:
     hooks:
     -   id: swiftlint
         name: SwiftLint
-        entry: swiftlint --strict --fix
+        entry: swiftlint --strict
         language: system
         types: [swift]
         pass_filenames: true

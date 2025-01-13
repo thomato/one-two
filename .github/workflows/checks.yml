@@ -1,0 +1,42 @@
+name: iOS Code Quality Checks
+
+on:
+  # Allows manual triggering from GitHub UI for when we need to run checks
+  # on non-Swift file changes or want to rerun the pipeline
+  workflow_dispatch:  
+  
+  push:
+    branches: [ main ]
+    # Path filters optimize CI minutes by only running when relevant files change.
+    # Note: Some important changes might not trigger the workflow (e.g., .env files, scripts).
+    # Use workflow_dispatch to manually run checks for such changes.
+    paths:
+      - '**.swift'
+      - '**.xcodeproj/**'
+      - '**.xcworkspace/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**.swift'
+      - '**.xcodeproj/**'
+      - '**.xcworkspace/**'
+
+jobs:
+  lint:
+    name: Lint and Format Check
+    runs-on: macos-14
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install SwiftLint
+      run: brew install swiftlint
+      
+    - name: Install SwiftFormat
+      run: brew install swiftformat
+      
+    - name: SwiftLint
+      run: swiftlint --strict
+      
+    - name: SwiftFormat Check
+      run: swiftformat . --lint
