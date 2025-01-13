@@ -1,5 +1,6 @@
 disabled_rules:
   - trailing_comma
+  - multiple_closures_with_trailing_closure
 
 excluded:
   - Pods

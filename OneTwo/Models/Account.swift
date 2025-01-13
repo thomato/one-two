@@ -15,7 +15,6 @@ struct Account: Equatable, Identifiable {
     let secret: String
 
     var currentCode: String {
-        // TODO: implement proper TOTP generation here
         // This is just a placeholder that changes every 30 seconds
         let timeBlock = Int(Date().timeIntervalSince1970 / 30)
         return String(format: "%06d", timeBlock % 1_000_000)
