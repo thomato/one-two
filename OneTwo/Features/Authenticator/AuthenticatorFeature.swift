@@ -19,9 +19,11 @@ struct AuthenticatorFeature {
     enum Action {
         case addAccountButtonTapped
         case deleteAccount(IndexSet)
+        case generateTOTPCodes
     }
 
     @Dependency(\.uuid) var uuid
+    @Dependency(\.totpGenerator) var totpGenerator
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -38,6 +40,11 @@ struct AuthenticatorFeature {
 
             case let .deleteAccount(indexSet):
                 state.accounts.remove(atOffsets: indexSet)
+                return .none
+
+            case .generateTOTPCodes:
+                // This action is used to trigger a UI refresh when needed
+                // The actual code generation happens in the view when the account is displayed
                 return .none
             }
         }
