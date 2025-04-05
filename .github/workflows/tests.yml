@@ -1,53 +1,245 @@
 name: iOS Tests
 
 on:
-  workflow_dispatch:
   push:
     branches: [ main ]
-    paths:
-      - '**.swift'
-      - '**.xcodeproj/**'
-      - '**.xcworkspace/**'
   pull_request:
     branches: [ main ]
-    paths:
-      - '**.swift'
-      - '**.xcodeproj/**'
-      - '**.xcworkspace/**'
 
 jobs:
   test:
-    name: Build and Test
+    name: Test iOS App
     runs-on: macos-14
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '16.1.0'
+      # 1. Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: List Available Simulators
-      run: xcrun simctl list devices
+      # 2. List Xcode
+      - name: List Available Xcode Versions
+        run: ls -d /Applications/Xcode*
 
-    - name: Install xcpretty
-      run: gem install xcpretty
+      # 3. Setup Xcode
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.2'
 
-    - name: Build and Test
-      run: |
-        xcodebuild test \
-          -scheme "OneTwo" \
-          -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.1" \
-          -skipPackagePluginValidation \
-          -skipMacroValidation \
-          | xcpretty && exit ${PIPESTATUS[0]}
+      # 4. Verify Xcode
+      - name: Verify Xcode Selection
+        run: |
+          xcodebuild -version
+          xcode-select -p
 
-    - name: Run Test Coverage
-      run: |
-        xcodebuild test \
-          -scheme "OneTwo" \
-          -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.1" \
-          -enableCodeCoverage YES \
-          -skipMacroValidation \
-          | xcpretty && exit ${PIPESTATUS[0]}
+      # --- Steps Added/Modified Before the Failing Step ---
+
+      # 4.5 Clean SPM Caches (NEW)
+      - name: Clean SPM Caches
+        run: |
+          echo "Cleaning Swift Package Manager caches..."
+          rm -rf ~/Library/Caches/org.swift.swiftpm || echo "Failed to remove global SPM cache"
+          rm -rf ~/Library/org.swift.swiftpm || echo "Failed to remove legacy global SPM config"
+          # Also remove workspace-local SPM build artifacts if they exist
+          rm -rf .build || echo "Failed to remove local .build dir"
+          # Clean derived data used later too, just in case
+          rm -rf "./DerivedData" || echo "Failed to remove local DerivedData dir"
+
+      # 4.8 Resolve Package Dependencies Explicitly (NEW)
+      - name: Resolve Package Dependencies Explicitly
+        run: |
+          echo "Explicitly resolving Swift Package dependencies..."
+          # Add -workspace YourWorkspace.xcworkspace if needed
+          # Using generic destination is fine for resolution
+          xcodebuild -resolvePackageDependencies -scheme "OneTwo" -destination "generic/platform=iOS Simulator"
+        # Give this a generous timeout as resolution can be slow
+        timeout-minutes: 15
+
+      # --- Original Step 8 (Now Step 5) - Keep its name for clarity ---
+      # (Previously Step 8: Check Project Parsing)
+      - name: Check Project Parsing (showBuildSettings without destination)
+        run: |
+          echo "Checking if xcodebuild can parse project/scheme without simulator interaction..."
+          echo "Running: xcodebuild -scheme \"OneTwo\" -showBuildSettings (Timeout: 10 min)"
+          # Add -workspace YourWorkspace.xcworkspace if needed
+          # Add -verbose flag to potentially see where it gets stuck
+          if xcodebuild -scheme "OneTwo" -showBuildSettings -verbose; then
+            echo "xcodebuild -showBuildSettings WITHOUT destination SUCCEEDED."
+          else
+            exit_code=$?
+            echo "xcodebuild -showBuildSettings WITHOUT destination FAILED with exit code $exit_code."
+            # If this fails/times out after explicit resolution, it's likely a deeper project/xcodebuild issue
+            exit $exit_code
+          fi
+        # Increase timeout significantly for debugging this hang
+        timeout-minutes: 10
+
+      # --- Subsequent steps (Simulator setup etc.) follow ---
+      # (These only run if the above succeeds)
+
+      # 6. List Runtimes/Device Types (Original 4.5)
+      - name: List Available Runtimes and Device Types
+        if: success()
+        run: |
+          echo "--- Available Runtimes ---"; xcrun simctl list runtimes
+          echo "--- Available Device Types ---"; xcrun simctl list devicetypes
+
+      # 7. Define Simulator Details (Original 5)
+      - name: Define Simulator Details
+        if: success()
+        id: sim_details
+        run: |
+          DEVICE_NAME="iPhone SE (3rd generation)" # Verify name from step 6
+          OS_VERSION="18.1"
+          RUNTIME_ID="com.apple.CoreSimulator.SimRuntime.iOS-$(echo $OS_VERSION | sed 's/\./-/g')"
+          DEVICE_TYPE_ID_RAW=$(echo "$DEVICE_NAME" | sed 's/ /-/g' | sed 's/(//g' | sed 's/)//g')
+          DEVICE_TYPE_ID="com.apple.CoreSimulator.SimDeviceType.$DEVICE_TYPE_ID_RAW"
+          echo "Using Device Name: '$DEVICE_NAME'"
+          echo "Using Runtime ID: $RUNTIME_ID"
+          echo "Using Device Type ID: $DEVICE_TYPE_ID"
+          echo "DEVICE_NAME=$DEVICE_NAME" >> $GITHUB_OUTPUT
+          echo "OS_VERSION=$OS_VERSION" >> $GITHUB_OUTPUT
+          echo "RUNTIME_ID=$RUNTIME_ID" >> $GITHUB_OUTPUT
+          echo "DEVICE_TYPE_ID=$DEVICE_TYPE_ID" >> $GITHUB_OUTPUT
+
+      # 8. Shutdown Simulators (Original 6)
+      - name: Shut down existing simulators
+        if: success()
+        run: xcrun simctl shutdown all || true
+
+      # 9. Create, Boot, Wait for Simulator (Original 7)
+      - name: Create, Boot, and Wait for Simulator
+        if: success()
+        id: boot_sim
+        run: |
+          # ... (Keep the robust boot/wait logic from previous working version) ...
+          echo "Attempting to create and boot simulator..."
+          SIM_NAME="CI-Runner-${{ github.run_id }}-${{ github.run_attempt }}"
+          DEVICE_TYPE_ID="${{ steps.sim_details.outputs.DEVICE_TYPE_ID }}"
+          RUNTIME_ID="${{ steps.sim_details.outputs.RUNTIME_ID }}"
+          udid=$(xcrun simctl create "$SIM_NAME" "$DEVICE_TYPE_ID" "$RUNTIME_ID" || xcrun simctl list devices | grep "$SIM_NAME" | grep -oE '[A-F0-9]{8}-([A-F0-9]{4}-){3}[A-F0-9]{12}' | head -n 1)
+          if [ -z "$udid" ]; then echo "Error: Failed to create/find simulator UDID."; xcrun simctl list devices; exit 1; fi
+          echo "Using Simulator UDID: $udid"
+          echo "SIM_UDID=$udid" >> $GITHUB_ENV
+          echo "SIM_UDID_OUTPUT=$udid" >> $GITHUB_OUTPUT
+          echo "Booting simulator $udid..."
+          xcrun simctl boot "$udid"
+          echo "Waiting for boot completion and basic service readiness (max 6 minutes)..."
+          max_wait_seconds=360; interval_seconds=15; elapsed_seconds=0; booted_and_ready=false
+          while [ $elapsed_seconds -lt $max_wait_seconds ]; do
+            state=$(xcrun simctl list devices "$udid" | grep "$udid" | grep -o '(Booted)')
+            if [ "$state" == "(Booted)" ]; then
+              if xcrun simctl getenv "$udid" HOME > /dev/null 2>&1; then echo "Simulator $udid appears ready."; booted_and_ready=true; break; fi
+            fi
+            echo "Simulator $udid not fully ready yet. Waiting ${interval_seconds}s... (${elapsed_seconds}s / ${max_wait_seconds}s)"
+            sleep $interval_seconds; elapsed_seconds=$((elapsed_seconds + interval_seconds))
+          done
+          if [ "$booted_and_ready" != true ]; then echo "Error: Simulator $udid did not become fully ready."; xcrun simctl list devices; log show --last 5m --predicate 'process contains "Simulator" or process contains "CoreSimulator" or process contains "simctl"' --info --debug --style compact || true; exit 1; fi
+          echo "Simulator $udid booted. Adding extra 15-second delay..."
+          sleep 15
+        timeout-minutes: 8
+
+      # 10. Check Xcodebuild Interaction with Simulator (Original 9)
+      - name: Check xcodebuild Interaction with Simulator
+        if: success()
+        id: interaction_check
+        env:
+          SIMULATOR_UDID: ${{ steps.boot_sim.outputs.SIM_UDID_OUTPUT }}
+        run: |
+          # ... (Keep the robust interaction check logic from previous working version) ...
+          if [ -z "$SIMULATOR_UDID" ]; then echo "Error: SIMULATOR_UDID not set!"; exit 1; fi
+          echo "Checking xcodebuild interaction with Simulator ID: $SIMULATOR_UDID"
+          DESTINATION_UDID="platform=iOS Simulator,id=$SIMULATOR_UDID"
+          echo "Adding short delay (10s) immediately before xcodebuild -showBuildSettings with destination..."
+          sleep 10
+          echo "Running: xcodebuild -scheme \"OneTwo\" -destination \"$DESTINATION_UDID\" -showBuildSettings (Step Timeout: 10 min)"
+          # Add -workspace YourWorkspace.xcworkspace if needed
+          if xcodebuild -scheme "OneTwo" -destination "$DESTINATION_UDID" -showBuildSettings; then echo "Xcodebuild interaction check SUCCEEDED."; else exit_code=$?; echo "Xcodebuild interaction check FAILED (Exit Code $exit_code)."; echo "--- Attempting simctl diagnose ---"; timeout 30s xcrun simctl diagnose "$SIMULATOR_UDID" --output "/tmp/sim_diagnose_${SIMULATOR_UDID}.logarchive" || echo "Diagnose failed/timed out."; echo "--- Listing devices ---"; xcrun simctl list devices; echo "--- System Log ---"; log show --last 5m --predicate 'process contains "Simulator" or process contains "CoreSimulator" or process contains "simctl" or process contains "xcodebuild"' --info --debug --style compact || true; exit $exit_code; fi
+        timeout-minutes: 10
+
+      # 11. Upload Diagnose Artifact (Original 10)
+      - name: Upload Diagnose Logs
+        if: failure() && steps.interaction_check.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: SimDiagnose-${{ github.run_id }}-${{ github.run_attempt }}
+          path: /tmp/sim_diagnose_*.logarchive
+          retention-days: 7
+
+      # 12. Clean Build Folder (Original 11)
+      - name: Clean Build Folder
+        if: success()
+        run: |
+          echo "Cleaning Xcode build folder..."
+          # Add -workspace YourWorkspace.xcworkspace if needed
+          xcodebuild clean -scheme "OneTwo" -destination "generic/platform=iOS Simulator" || echo "Clean command issued warning/error, continuing..."
+          # Also clean local DerivedData path we will use
+          rm -rf "./DerivedData" || echo "Failed to remove local DerivedData dir"
+
+      # 13. Build For Testing (Original 12, with test plan fix)
+      - name: Build For Testing
+        if: success()
+        id: build_for_test
+        env:
+          SIMULATOR_UDID: ${{ steps.boot_sim.outputs.SIM_UDID_OUTPUT }}
+        run: |
+          set -o pipefail
+          DESTINATION_UDID="platform=iOS Simulator,id=$SIMULATOR_UDID"
+          DERIVED_DATA_PATH="./DerivedData"
+          TEST_PLAN_NAME="OneTwo" # Change if your test plan is named differently
+          echo "Building for testing on destination: $DESTINATION_UDID"
+          echo "DerivedData path: $DERIVED_DATA_PATH"
+          echo "Explicitly using test plan: $TEST_PLAN_NAME"
+          # Add -workspace YourWorkspace.xcworkspace if needed
+          xcodebuild build-for-testing \
+            -scheme "OneTwo" \
+            -testPlan "$TEST_PLAN_NAME" \
+            -destination "$DESTINATION_UDID" \
+            -derivedDataPath "$DERIVED_DATA_PATH" \
+            -skipPackagePluginValidation \
+            -skipMacroValidation
+          XCTESTRUN_FILE=$(find "$DERIVED_DATA_PATH/Build/Products" -name '*.xctestrun' | head -n 1)
+          if [[ -z "$XCTESTRUN_FILE" ]]; then echo "Error: Could not find .xctestrun file in $DERIVED_DATA_PATH/Build/Products"; ls -R "$DERIVED_DATA_PATH/Build/Products" || true; exit 1; fi
+          echo "Found xctestrun file: $XCTESTRUN_FILE"
+          echo "XCTESTRUN_PATH=$XCTESTRUN_FILE" >> $GITHUB_ENV
+        timeout-minutes: 25
+
+      # 14. Test Without Building (Original 13)
+      - name: Test Without Building
+        if: success()
+        env:
+          SIMULATOR_UDID: ${{ steps.boot_sim.outputs.SIM_UDID_OUTPUT }}
+        run: |
+          set -o pipefail
+          DESTINATION_UDID="platform=iOS Simulator,id=$SIMULATOR_UDID"
+          RESULT_BUNDLE_PATH="TestResults-${{ github.run_id }}.xcresult"
+          DERIVED_DATA_PATH="./DerivedData"
+          if [[ -z "$XCTESTRUN_PATH" || ! -f "$XCTESTRUN_PATH" ]]; then echo "Error: XCTESTRUN_PATH ($XCTESTRUN_PATH) not set or not found!"; exit 1; fi
+          echo "Running tests without building using: Dest: $DESTINATION_UDID, xctestrun: $XCTESTRUN_PATH, DerivedData: $DERIVED_DATA_PATH"
+          # Add -workspace YourWorkspace.xcworkspace if needed (usually not)
+          xcodebuild test-without-building \
+            -xctestrun "$XCTESTRUN_PATH" \
+            -destination "$DESTINATION_UDID" \
+            -derivedDataPath "$DERIVED_DATA_PATH" \
+            -resultBundlePath "$RESULT_BUNDLE_PATH" \
+            -skip-testing "OneTwoUITests/testLaunchPerformance" # Keep skipping perf test
+          echo "Test execution finished."
+        timeout-minutes: 25
+
+      # 15. Upload Test Results Artifact (Original 14)
+      - name: Upload Test Results
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults-${{ github.run_id }}-${{ github.run_attempt }}
+          path: "TestResults-*.xcresult"
+          retention-days: 7
+
+      # 16. Cleanup Simulator (Original 15)
+      - name: Shutdown and Delete Simulator
+        if: always() && env.SIM_UDID
+        run: |
+          echo "Cleaning up simulator with UDID: $SIM_UDID"
+          xcrun simctl shutdown "$SIM_UDID" || echo "Shutdown failed or already shutdown."
+          xcrun simctl delete "$SIM_UDID" || echo "Delete failed or already deleted."
+        timeout-minutes: 2

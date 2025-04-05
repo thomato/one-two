@@ -171,7 +171,7 @@ final class TOTPGenerationTests: XCTestCase {
         let reducer = AuthenticatorFeature()
 
         // Create a test store with our mocks
-        let testStore = TestStore(
+        let testStore = await TestStore(
             initialState: AuthenticatorFeature.State(),
             reducer: {
                 reducer
