@@ -17,7 +17,10 @@ repos:
 
     -   id: xcode-test
         name: Run Xcode Tests
-        entry: bash -c 'export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer" && xcodebuild test -scheme "OneTwo" -destination "platform=iOS Simulator,name=iPhone 16 Plus"'
+        entry: bash -c 'export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer" && 
+                     xcrun simctl shutdown all &&
+                     xcodebuild test -scheme "OneTwo" -destination "platform=iOS Simulator,name=iPhone 16 Plus" -testPlan "OneTwoTests" || 
+                     (echo "Tests failed. Please fix before committing." && exit 1)'
         language: system
         pass_filenames: false
         types: [swift]

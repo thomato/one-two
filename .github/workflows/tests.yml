@@ -1,53 +1,82 @@
 name: iOS Tests
 
 on:
-  workflow_dispatch:
   push:
     branches: [ main ]
-    paths:
-      - '**.swift'
-      - '**.xcodeproj/**'
-      - '**.xcworkspace/**'
   pull_request:
     branches: [ main ]
-    paths:
-      - '**.swift'
-      - '**.xcodeproj/**'
-      - '**.xcworkspace/**'
 
 jobs:
   test:
-    name: Build and Test
+    name: Test iOS App
     runs-on: macos-14
-    
+    timeout-minutes: 30  # Increased timeout for the entire job
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '16.1.0'
+      # 1. Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: List Available Simulators
-      run: xcrun simctl list devices
+      # 2. Setup Xcode
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.2'
 
-    - name: Install xcpretty
-      run: gem install xcpretty
+      # 3. Setup Ruby
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: false  # Disable cache to allow gemfile updates
 
-    - name: Build and Test
-      run: |
-        xcodebuild test \
-          -scheme "OneTwo" \
-          -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.1" \
-          -skipPackagePluginValidation \
-          -skipMacroValidation \
-          | xcpretty && exit ${PIPESTATUS[0]}
+      # 4. Update dependencies
+      - name: Update dependencies
+        run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle install
+          bundle update fastlane
 
-    - name: Run Test Coverage
-      run: |
-        xcodebuild test \
-          -scheme "OneTwo" \
-          -destination "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.1" \
-          -enableCodeCoverage YES \
-          -skipMacroValidation \
-          | xcpretty && exit ${PIPESTATUS[0]}
+      # 5. Clear Xcode caches and simulator data
+      - name: Clean Xcode environment
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData/* || true
+          rm -rf ~/Library/Caches/com.apple.dt.Xcode/* || true
+          xcrun simctl delete unavailable || true
+
+      # 6. Prewarm simulator
+      - name: Prewarm Simulator
+        run: |
+          xcrun simctl list runtimes
+          SIM_UDID=$(xcrun simctl create "PrewarmSim" "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimRuntime.iOS-18-1")
+          xcrun simctl boot $SIM_UDID
+          sleep 30
+          xcrun simctl shutdown $SIM_UDID || true
+          xcrun simctl delete $SIM_UDID || true
+
+      # 7. Run tests with Fastlane
+      - name: Run tests
+        env:
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "60"
+          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: "5"
+        run: bundle exec fastlane test
+        
+      # 8. Upload test results
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            test_output/
+            ~/Library/Logs/DiagnosticReports/
+          retention-days: 7
+
+      # 9. Upload xcodebuild logs on failure
+      - name: Upload Xcode logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-logs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ~/Library/Developer/Xcode/DerivedData/*/Logs
+          retention-days: 3

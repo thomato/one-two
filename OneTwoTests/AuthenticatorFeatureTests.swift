@@ -14,6 +14,7 @@ final class AuthenticatorFeatureTests: XCTestCase {
     func testAddAccount() async {
         let store = withDependencies {
             $0.uuid = .incrementing
+            $0.totpGenerator = MockTOTPGenerator()
         } operation: {
             TestStore(
                 initialState: AuthenticatorFeature.State(),
@@ -50,6 +51,7 @@ final class AuthenticatorFeatureTests: XCTestCase {
     func testDeleteSingleAccount() async {
         let store = withDependencies {
             $0.uuid = .incrementing
+            $0.totpGenerator = MockTOTPGenerator()
         } operation: {
             TestStore(
                 initialState: AuthenticatorFeature.State(
@@ -73,6 +75,7 @@ final class AuthenticatorFeatureTests: XCTestCase {
     func testDeleteMultipleAccounts() async {
         let store = withDependencies {
             $0.uuid = .incrementing
+            $0.totpGenerator = MockTOTPGenerator()
         } operation: {
             TestStore(
                 initialState: AuthenticatorFeature.State(
@@ -107,5 +110,28 @@ final class AuthenticatorFeatureTests: XCTestCase {
                 ),
             ]
         }
+    }
+
+    func testGenerateTOTPCodes() async {
+        let store = withDependencies {
+            $0.uuid = .incrementing
+            $0.totpGenerator = MockTOTPGenerator()
+        } operation: {
+            TestStore(
+                initialState: AuthenticatorFeature.State(
+                    accounts: [
+                        Account(
+                            id: UUID(0),
+                            name: "Example Account 1",
+                            secret: "JBSWY3DPEHPK3PXP"
+                        ),
+                    ]
+                ),
+                reducer: { AuthenticatorFeature() }
+            )
+        }
+
+        // This action doesn't change state but triggers UI refresh
+        await store.send(.generateTOTPCodes)
     }
 }

@@ -1,0 +1,128 @@
+fastlane_version "2.216.0"
+default_platform :ios
+
+# Load custom patch for trainer
+require_relative 'custom_trainer_patch'
+require_relative 'process_xcresult'
+
+platform :ios do
+  before_all do
+    # Clean Xcode caches to help with flaky simulator issues
+    sh "rm -rf ~/Library/Developer/Xcode/DerivedData/* || true"
+    sh "rm -rf ~/Library/Caches/com.apple.dt.Xcode/* || true"
+    sh "rm -rf ~/Library/Caches/org.swift.swiftpm || true"
+    
+    # Clean up simulators
+    sh "xcrun simctl delete unavailable || true"
+  end
+
+  desc "Run all the tests"
+  lane :test do
+    # Set timeouts from environment or use defaults
+    ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] ||= "60"
+    ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] ||= "5"
+    
+    # Create unique simulator for this run
+    sim_name = "CI-Sim-#{Time.now.to_i}"
+    sim_udid = sh("xcrun simctl create '#{sim_name}' 'iPhone SE (3rd generation)' 'com.apple.CoreSimulator.SimRuntime.iOS-18-1'").strip
+    
+    # Boot simulator with verification
+    sh "xcrun simctl boot #{sim_udid}"
+    
+    # Wait for simulator to boot completely with robust verification
+    wait_for_simulator_boot(udid: sim_udid)
+    
+    begin
+      # Build and run tests in one step
+      scan(
+        project: "OneTwo.xcodeproj",
+        scheme: "OneTwo",
+        testplan: "OneTwo",
+        destination: "platform=iOS Simulator,id=#{sim_udid}",
+        derived_data_path: "./DerivedData",
+        clean: true,
+        output_directory: "./test_output",
+        skip_package_dependencies_resolution: true,
+        disable_concurrent_testing: true,
+        xcargs: "-skipMacroValidation",
+        result_bundle: true,
+        build_for_testing: true,
+        number_of_retries: 1
+      )
+    rescue => e
+      UI.error("Error during scan: #{e.message}")
+      UI.message("Attempting to process xcresult manually...")
+      
+      # Try to find and process xcresult manually
+      xcresult_path = Dir["#{Dir.pwd}/test_output/*.xcresult"].first
+      if xcresult_path
+        XCResultProcessor.process(xcresult_path, "#{Dir.pwd}/test_output")
+      else
+        UI.error("No xcresult file found to process")
+      end
+      
+      # Re-raise the error if it's not a trainer xcresulttool issue
+      unless e.message.include?("xcresulttool")
+        raise e
+      end
+    ensure
+      # Always clean up simulator
+      sh "xcrun simctl shutdown #{sim_udid} || true"
+      sh "xcrun simctl delete #{sim_udid} || true"
+    end
+  end
+  
+  # Helper method to wait for simulator to fully boot
+  private_lane :wait_for_simulator_boot do |options|
+    udid = options[:udid]
+    max_attempts = 30  # 7.5 minutes total
+    attempt = 0
+    booted = false
+    
+    while attempt < max_attempts && !booted
+      attempt += 1
+      UI.message("Attempt #{attempt}/#{max_attempts}: Checking if simulator is ready...")
+      
+      # Check if simulator is booted
+      boot_status = sh("xcrun simctl list devices | grep '#{udid}' | grep -c 'Booted'", error_callback: ->(msg) { '0' }).strip
+      
+      # Try to get HOME env to check if basic services are running
+      if boot_status == '1'
+        if system("xcrun simctl getenv '#{udid}' HOME > /dev/null 2>&1")
+          # Extra verification - check if SpringBoard is running
+          springboard_status = system("xcrun simctl spawn #{udid} launchctl list com.apple.SpringBoard > /dev/null 2>&1")
+          if springboard_status
+            UI.success("✅ Simulator is booted and ready")
+            booted = true
+          else
+            UI.message("⚠️ Simulator booted but SpringBoard not ready yet")
+          end
+        else
+          UI.message("⚠️ Simulator booted but services not ready yet")
+        end
+      else
+        UI.message("⚠️ Simulator not booted yet")
+      end
+      
+      if !booted
+        UI.message("Waiting 15 seconds before next check...")
+        sleep(15)
+      end
+    end
+    
+    # Add extra 20 seconds stabilization time
+    UI.message("Adding extra 20 seconds stabilization time...")
+    sleep(20)
+    
+    if !booted
+      UI.user_error!("❌ Failed to boot simulator after #{max_attempts} attempts")
+      sh "xcrun simctl diagnose --all --output ./test_output/simulator_diagnostic.zip || true"
+    end
+  end
+  
+  error do |lane, exception, options|
+    # Collect diagnostics on failure
+    sh "xcrun simctl diagnose --all --output ./test_output/simulator_diagnostic.zip || true"
+    sh "find /var/folders -name 'ResultBundle_*.xcresult' -exec cp -r {} ./test_output/ \\; 2>/dev/null || true"
+  end
+end

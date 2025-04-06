@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D8A856F02D0B8A48009E7153 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D8A856EF2D0B8A48009E7153 /* ComposableArchitecture */; };
+		D8E9A1502D99AB9A0038532A /* SwiftOTP-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = D8E9A14F2D99AB9A0038532A /* SwiftOTP-Dynamic */; };
+		D8E9A1552D99B5830038532A /* SwiftOTP-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D8E9A14F2D99AB9A0038532A /* SwiftOTP-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,10 +29,36 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D8E9A1562D99B5830038532A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D8E9A1552D99B5830038532A /* SwiftOTP-Dynamic in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8E9A15F2D99B68B0038532A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D8285E2A2D0B82BB00671C47 /* OneTwo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneTwo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8285E3E2D0B82BC00671C47 /* OneTwoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneTwoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8285E482D0B82BC00671C47 /* OneTwoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneTwoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8420C692D99C21C003590AD /* OneTwo.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = OneTwo.xctestplan; sourceTree = "<group>"; };
+		D8420C6A2D99CFEB003590AD /* OneTwoTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = OneTwoTests.xctestplan; path = ../OneTwoTests.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -70,6 +98,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8A856F02D0B8A48009E7153 /* ComposableArchitecture in Frameworks */,
+				D8E9A1502D99AB9A0038532A /* SwiftOTP-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,9 +122,12 @@
 		D8285E212D0B82BB00671C47 = {
 			isa = PBXGroup;
 			children = (
+				D8420C692D99C21C003590AD /* OneTwo.xctestplan */,
+				D8420C6A2D99CFEB003590AD /* OneTwoTests.xctestplan */,
 				D8285E2C2D0B82BB00671C47 /* OneTwo */,
 				D8285E412D0B82BC00671C47 /* OneTwoTests */,
 				D8285E4B2D0B82BC00671C47 /* OneTwoUITests */,
+				D8E9A1572D99B68B0038532A /* Frameworks */,
 				D8285E2B2D0B82BB00671C47 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -110,6 +142,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D8E9A1572D99B68B0038532A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -120,6 +159,7 @@
 				D8285E262D0B82BB00671C47 /* Sources */,
 				D8285E272D0B82BB00671C47 /* Frameworks */,
 				D8285E282D0B82BB00671C47 /* Resources */,
+				D8E9A1562D99B5830038532A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -131,6 +171,7 @@
 			name = OneTwo;
 			packageProductDependencies = (
 				D8A856EF2D0B8A48009E7153 /* ComposableArchitecture */,
+				D8E9A14F2D99AB9A0038532A /* SwiftOTP-Dynamic */,
 			);
 			productName = OneTwo;
 			productReference = D8285E2A2D0B82BB00671C47 /* OneTwo.app */;
@@ -143,6 +184,7 @@
 				D8285E3A2D0B82BC00671C47 /* Sources */,
 				D8285E3B2D0B82BC00671C47 /* Frameworks */,
 				D8285E3C2D0B82BC00671C47 /* Resources */,
+				D8E9A15F2D99B68B0038532A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -216,6 +258,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D8A856EE2D0B8A48009E7153 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				D8E9A14C2D99AB9A0038532A /* XCRemoteSwiftPackageReference "SwiftOTP" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D8285E2B2D0B82BB00671C47 /* Products */;
@@ -300,7 +343,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"OneTwo/Preview Content\"";
-				DEVELOPMENT_TEAM = 5H823CDB8B;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -341,7 +384,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"OneTwo/Preview Content\"";
-				DEVELOPMENT_TEAM = 5H823CDB8B;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -545,12 +588,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "pro.thomassen.One-TwoUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = "One Two";
+				TEST_TARGET_NAME = OneTwo;
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -567,12 +611,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "pro.thomassen.One-TwoUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = "One Two";
+				TEST_TARGET_NAME = OneTwo;
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
@@ -627,6 +672,14 @@
 				minimumVersion = 1.17.0;
 			};
 		};
+		D8E9A14C2D99AB9A0038532A /* XCRemoteSwiftPackageReference "SwiftOTP" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lachlanbell/SwiftOTP.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -634,6 +687,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D8A856EE2D0B8A48009E7153 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		D8E9A14F2D99AB9A0038532A /* SwiftOTP-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8E9A14C2D99AB9A0038532A /* XCRemoteSwiftPackageReference "SwiftOTP" */;
+			productName = "SwiftOTP-Dynamic";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

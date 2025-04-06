@@ -14,8 +14,8 @@ final class OneTwoUITests: XCTestCase {
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your
-        // tests before they run. The setUp method is a good place to do this.
+        // In UI tests it's important to set the initial state - such as interface orientation - required for your tests
+        // before they run. The setUp method is a good place to do this.
     }
 
     override func tearDownWithError() throws {
@@ -34,9 +34,20 @@ final class OneTwoUITests: XCTestCase {
     @MainActor
     func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
+            // Configure the app with the UI testing flag to prevent any special behavior
+            // that might cause premature exit
+            let app = XCUIApplication()
+            app.launchArguments = ["--uitesting"]
+
+            // This measures how long it takes to launch your application
             measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
+                app.launch()
+
+                // Wait for the app to fully launch before terminating it
+                XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
+
+                // Terminate the app manually at the end of each measurement run
+                app.terminate()
             }
         }
     }

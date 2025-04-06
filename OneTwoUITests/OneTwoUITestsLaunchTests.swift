@@ -19,11 +19,13 @@ final class OneTwoUITestsLaunchTests: XCTestCase {
     @MainActor
     func testLaunch() throws {
         let app = XCUIApplication()
+        app.launchArguments = ["-ui-testing"]
         app.launch()
 
-        // Insert steps here to perform after app launch but before taking a screenshot,
-        // such as logging into a test account or navigating somewhere in the app
+        // More reliable way to wait for the app to be ready
+        XCTAssert(app.wait(for: .runningForeground, timeout: 5))
 
+        // Take screenshot without additional expectations that might fail
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "Launch Screen"
         attachment.lifetime = .keepAlways

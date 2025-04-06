@@ -14,9 +14,22 @@ import SwiftUI
 @main
 struct OneTwoApp: App {
     static let store = Store(
-        initialState: AuthenticatorFeature.State()
-    ) {
-        AuthenticatorFeature()
+        initialState: AuthenticatorFeature.State(),
+        reducer: {
+            AuthenticatorFeature()
+                ._printChanges()
+        }
+    )
+
+    init() {
+        // Configure the TOTP generator for UI testing if needed
+        if ProcessInfo.processInfo.isUITesting {
+            withDependencies {
+                $0[TOTPGeneratorKey.self] = TOTPGeneratorKey.testUIValue
+            } operation: {
+                // No operation needed here
+            }
+        }
     }
 
     var body: some Scene {

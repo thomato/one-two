@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "F313487F-3A63-4239-A429-A3477E388DAE",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:OneTwo.xcodeproj",
+      "identifier" : "D8285E292D0B82BB00671C47",
+      "name" : "OneTwo"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:OneTwo.xcodeproj",
+        "identifier" : "D8285E3D2D0B82BC00671C47",
+        "name" : "OneTwoTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:OneTwo.xcodeproj",
+        "identifier" : "D8285E472D0B82BC00671C47",
+        "name" : "OneTwoUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
