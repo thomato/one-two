@@ -10,6 +10,7 @@ jobs:
   test:
     name: Test iOS App
     runs-on: macos-14
+    timeout-minutes: 120
 
     steps:
       # 1. Checkout
@@ -33,15 +34,46 @@ jobs:
       - name: Install Fastlane
         run: bundle install
 
-      # 5. Run tests with Fastlane
+      # 5. Update fastlane
+      - name: Update Fastlane
+        run: bundle update fastlane
+
+      # 6. Prewarm simulator
+      - name: Prewarm Simulator
+        run: |
+          xcrun simctl list runtimes
+          # Pre-create and boot a simulator to warm up the system
+          SIM_UDID=$(xcrun simctl create "PrewarmSim" "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimRuntime.iOS-18-1")
+          xcrun simctl boot $SIM_UDID
+          # Wait a bit for initial boot
+          sleep 30
+          # Clean up the prewarm simulator
+          xcrun simctl shutdown $SIM_UDID
+          xcrun simctl delete $SIM_UDID
+
+      # 7. Run tests with Fastlane
       - name: Run tests
+        env:
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "120"
+          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: "10"
         run: bundle exec fastlane test
         
-      # 6. Upload test results
+      # 8. Upload test results
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ github.run_id }}-${{ github.run_attempt }}
-          path: test_output/
+          path: |
+            test_output/
+            ~/Library/Logs/DiagnosticReports/
           retention-days: 7
+
+      # 9. Upload xcodebuild logs on failure
+      - name: Upload Xcode logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-logs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ~/Library/Developer/Xcode/DerivedData/*/Logs
+          retention-days: 3
