@@ -18,6 +18,10 @@ platform :ios do
 
   desc "Run all the tests"
   lane :test do
+    # Set timeouts from environment or use defaults
+    ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] ||= "60"
+    ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] ||= "5"
+    
     # Create unique simulator for this run
     sim_name = "CI-Sim-#{Time.now.to_i}"
     sim_udid = sh("xcrun simctl create '#{sim_name}' 'iPhone SE (3rd generation)' 'com.apple.CoreSimulator.SimRuntime.iOS-18-1'").strip
@@ -29,10 +33,6 @@ platform :ios do
     wait_for_simulator_boot(udid: sim_udid)
     
     begin
-      # Set scan timeouts - this helps with CI environments
-      ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
-      ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] = "10"
-      
       # Build and run tests in one step
       scan(
         project: "OneTwo.xcodeproj",
@@ -47,7 +47,7 @@ platform :ios do
         xcargs: "-skipMacroValidation",
         result_bundle: true,
         build_for_testing: true,
-        number_of_retries: 3
+        number_of_retries: 1
       )
     rescue => e
       UI.error("Error during scan: #{e.message}")
@@ -75,7 +75,7 @@ platform :ios do
   # Helper method to wait for simulator to fully boot
   private_lane :wait_for_simulator_boot do |options|
     udid = options[:udid]
-    max_attempts = 60
+    max_attempts = 30  # 7.5 minutes total
     attempt = 0
     booted = false
     

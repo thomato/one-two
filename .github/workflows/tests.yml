@@ -10,7 +10,7 @@ jobs:
   test:
     name: Test iOS App
     runs-on: macos-14
-    timeout-minutes: 120
+    timeout-minutes: 30  # Increased timeout for the entire job
 
     steps:
       # 1. Checkout
@@ -28,34 +28,37 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
-          bundler-cache: true
+          bundler-cache: false  # Disable cache to allow gemfile updates
 
-      # 4. Install Fastlane
-      - name: Install Fastlane
-        run: bundle install
+      # 4. Update dependencies
+      - name: Update dependencies
+        run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle install
+          bundle update fastlane
 
-      # 5. Update fastlane
-      - name: Update Fastlane
-        run: bundle update fastlane
+      # 5. Clear Xcode caches and simulator data
+      - name: Clean Xcode environment
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData/* || true
+          rm -rf ~/Library/Caches/com.apple.dt.Xcode/* || true
+          xcrun simctl delete unavailable || true
 
       # 6. Prewarm simulator
       - name: Prewarm Simulator
         run: |
           xcrun simctl list runtimes
-          # Pre-create and boot a simulator to warm up the system
           SIM_UDID=$(xcrun simctl create "PrewarmSim" "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimRuntime.iOS-18-1")
           xcrun simctl boot $SIM_UDID
-          # Wait a bit for initial boot
           sleep 30
-          # Clean up the prewarm simulator
-          xcrun simctl shutdown $SIM_UDID
-          xcrun simctl delete $SIM_UDID
+          xcrun simctl shutdown $SIM_UDID || true
+          xcrun simctl delete $SIM_UDID || true
 
       # 7. Run tests with Fastlane
       - name: Run tests
         env:
-          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "120"
-          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: "10"
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "60"
+          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: "5"
         run: bundle exec fastlane test
         
       # 8. Upload test results
